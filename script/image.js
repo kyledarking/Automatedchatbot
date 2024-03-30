@@ -17,7 +17,7 @@ module.exports.config = {
 module.exports.run = async function ({ api, event, args }) {
 	const prompt = args.join(" ");
 	const w = await api.sendMessage("𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗶𝗻𝗴 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁 𝗽𝗹𝗲𝗮𝘀𝗲 𝘄𝗮𝗶𝘁 𝗮 𝗺𝗼𝗺𝗲𝗻𝘁...", event.threadID);
-	const url = `https://all-image-genator-d1p.onrender.com/dipto/sdxl?prompt=${encodeURIComponent(prompt)}`;
+	const url = `https://noobs-api.onrender.com/dipto/sdxl?prompt=${encodeURIComponent(prompt)}`;
 	try {
 		const response = await axios.get(url);
 		const imageUrls = response.data.imageUrls;

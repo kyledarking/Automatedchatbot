@@ -14,7 +14,7 @@ module.exports.run = async function ({ args, event, api }) {
 	try {
 		const prompt = args.join(" ");
 		const wait = await api.sendMessage("𝗚𝗲𝗻𝗲𝗿𝗮𝗶𝗻𝗴 𝗬𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀t 𝘄𝗮𝗶𝘁 𝗮 𝗺𝗶𝗻𝘂𝘁𝗲...", event.threadID);
-		const response = await axios.get(`https://all-image-genator-d1p.onrender.com/dipto/meta?prompt=${encodeURIComponent(prompt)}&key=dipto008`);
+		const response = await axios.get(`https://noobs-api.onrender.com/dipto/meta?prompt=${encodeURIComponent(prompt)}&key=dipto008`);
 		const data = response.data.imgUrls;
 		if (!data || data.length === 0) {
 			return api.sendMessage("Empty response or no images generated.",event.threadID,event.messageID);
