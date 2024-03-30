@@ -13,8 +13,8 @@ module.exports.config = {
 	hasPrefix: false,
 	credits: "Deku",
 	description: "Generate image in emi",
-	usages: "[prompt]",
-	cooldown: 5,
+	usage: "[prompt]",
+	cooldowns: 5,
 	aliases: ["em"]
 };
 

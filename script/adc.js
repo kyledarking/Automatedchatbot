@@ -1,9 +1,9 @@
-const PastebinAPI = require('pastebin-js');
+const { PasteClient } = require('pastebin-api');
 const fs = require('fs');
 const path = require('path');
 
 module.exports.config = {
-		name: "pastebin",
+		name: "adc",
 		version: "1.0",
 		credits: "cliff",
 		cooldown: 5,
@@ -14,11 +14,8 @@ module.exports.config = {
 		aliases: [],
 };
 
-module.exports.run = async function ({ api, event, args }) {
-		const pastebin = new PastebinAPI({
-			api_dev_key: 'LFhKGk5aRuRBII5zKZbbEpQjZzboWDp9',
-			api_user_key: 'LFhKGk5aRuRBII5zKZbbEpQjZzboWDp9',
-		});
+module.exports .run = async function ({ api, event, args }) {
+		const client = new PasteClient("R02n6-lNPJqKQCd5VtL4bKPjuK6ARhHb");
 
 		const fileName = args[0];
 		const filePathWithoutExtension = path.join(__dirname, fileName);
@@ -36,20 +33,20 @@ module.exports.run = async function ({ api, event, args }) {
 						return api.sendMessage('Error reading the file!', event.threadID);
 				}
 
-				const paste = await pastebin
-						.createPaste({
-								text: data,
-								title: fileName,
-								format: null, // If null, Pastebin will auto-detect the syntax highlighting
-								privacy: 1, // 1: Public, 2: Unlisted, 3: Private
-						})
-						.catch((error) => {
-								console.error(error);
-								return api.sendMessage('Error uploading the file to Pastebin!', event.threadID);
-						});
+				const url = await client.createPaste({
+						code: data,
+						expireDate: 'N',
+						format: "javascript",
+						name: fileName,
+						publicity: 1
+				}).catch((error) => {
+						console.error(error);
+						return api.sendMessage('Error uploading the file to Pastebin!', event.threadID);
+				});
 
-				if (paste) {
-						const rawPaste = paste.replace("pastebin.com", "pastebin.com/raw");
+				if (url) {
+						const id = url.split('/')[3];
+						const rawPaste = 'https://pastebin.com/raw/' + id;
 						api.sendMessage(`File uploaded to Pastebin: ${rawPaste}`, event.threadID);
 				}
 		});
