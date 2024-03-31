@@ -161,6 +161,9 @@ const routes = [{
 },{
 	path: '/spotify',
 	file: 'spotify.html'
+},{
+  path: '/allinone',
+	file: 'allinone.html'
 }, ];
 routes.forEach(route => {
 	app.get(route.path, (req, res) => {
