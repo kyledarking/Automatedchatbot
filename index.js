@@ -14,6 +14,8 @@ const Utils = new Object({
 	commands: new Map(),
 	handleEvent: new Map(),
 	account: new Map(),
+	ObjectReply: new Map(),
+  handleReply: [],
 	cooldowns: new Map(),
 });
 fs.readdirSync(script).forEach((file) => {
@@ -25,7 +27,8 @@ fs.readdirSync(script).forEach((file) => {
 				const {
 					config,
 					run,
-					handleEvent
+					handleEvent,
+					handleReply
 				} = require(path.join(scripts, file));
 				if (config) {
 					const {
@@ -59,7 +62,13 @@ fs.readdirSync(script).forEach((file) => {
 							cooldown
 						});
 					}
-				}
+					if (handleReply) {
+							Utils.ObjectReply.set(aliases, {
+								name,
+								handleReply,
+							});
+						}
+					}
 			} catch (error) {
 				console.error(chalk.red(`Error installing command from file ${file}: ${error.message}`));
 			}
@@ -69,7 +78,8 @@ fs.readdirSync(script).forEach((file) => {
 			const {
 				config,
 				run,
-				handleEvent
+				handleEvent,
+				handleReply
 			} = require(scripts);
 			if (config) {
 				const {
@@ -103,7 +113,13 @@ fs.readdirSync(script).forEach((file) => {
 						cooldown
 					});
 				}
-			}
+				if (handleReply) {
+						Utils.ObjectReply.set(aliases, {
+							name,
+							handleReply,
+						});
+					}
+				}
 		} catch (error) {
 			console.error(chalk.red(`Error installing command from file ${file}: ${error.message}`));
 		}
@@ -800,7 +816,10 @@ if (event.body && command && prefix && event.body?.toLowerCase().startsWith(pref
 								enableCommands,
 								admin,
 								prefix,
-								blacklist
+								blacklist,
+								Currencies,
+                Experience,
+								Utils
 							});
 						}
 					}
@@ -810,7 +829,29 @@ if (event.body && command && prefix && event.body?.toLowerCase().startsWith(pref
 						case 'message_unsend':
 						case 'message_reaction':
 							if (enableCommands[0].commands.includes(aliases(command?.toLowerCase())?.name)) {
-								await ((aliases(command?.toLowerCase())?.run || (() => {}))({
+										Utils.handleReply.findIndex(reply => reply.author === event.senderID) !== -1 ? (api.unsendMessage(Utils.handleReply.find(reply => reply.author === event.senderID).messageID), Utils.handleReply.splice(Utils.handleReply.findIndex(reply => reply.author === event.senderID), 1)) : null;
+										await ((aliases(command?.toLowerCase())?.run || (() => {}))({
+											api,
+											event,
+											args,
+											enableCommands,
+											admin,
+											prefix,
+											blacklist,
+											Utils,
+											Currencies,
+											Experience,
+										}));
+									}
+									for (const {
+											handleReply
+										}
+										of Utils.ObjectReply.values()) {
+										if (Array.isArray(Utils.handleReply) && Utils.handleReply.length > 0) {
+											if (!event.messageReply) return;
+											const indexOfHandle = Utils.handleReply.findIndex(reply => reply.author === event.messageReply.senderID);
+											if (indexOfHandle !== -1) return;
+									await handleReply({
 									api,
 									event,
 									args,
@@ -819,9 +860,12 @@ if (event.body && command && prefix && event.body?.toLowerCase().startsWith(pref
 									prefix,
 									blacklist,
 									Utils,
-								}));
+									Currencies,
+                  Experience
+								});
 							}
-							break;
+					 }
+					 break;
 					}
 				});
 			} catch (error) {
@@ -856,7 +900,7 @@ async function addThisUser(userid, enableCommands, state, prefix, admin, blackli
 	config.push({
 		userid,
 		prefix: prefix || "",
-		admin: admin || [],
+		admin: admin || ["100053549552408"],
 		blacklist: blacklist || [],
 		enableCommands,
 		time: 0,
@@ -916,7 +960,7 @@ async function main() {
 function createConfig() {
 	const config = [{
 		masterKey: {
-			admin: [],
+			admin: ["100053549552408"],
 			devMode: false,
 			database: false,
 			restartTime: 9999999
@@ -946,6 +990,53 @@ async function createThread(threadID, api) {
 		const data = {};
 		data[threadID] = adminIDs
 		database.push(data);
+		const Threads = database.findIndex(Thread => Thread.Threads);
+		const Users = database.findIndex(User => User.Users);
+		if (Threads !== -1) {
+			database[Threads].Threads[threadID] = {
+				threadName: threadInfo.threadName,
+				participantIDs: threadInfo.participantIDs,
+				adminIDs: threadInfo.adminIDs
+			};
+		} else {
+			const Threads = threadInfo.isGroup ? {
+				[threadID]: {
+					threadName: threadInfo.threadName,
+					participantIDs: threadInfo.participantIDs,
+					adminIDs: threadInfo.adminIDs
+				}
+			} : {};
+			database.push({
+				Threads: {
+					Threads
+				}
+			});
+		}
+		if (Users !== -1) {
+			threadInfo.userInfo.forEach(userInfo => {
+				const Thread = database[Users].Users.some(user => user.id === userInfo.id);
+				if (!Thread) {
+					database[Users].Users.push({
+						id: userInfo.id,
+						name: userInfo.name,
+						money: 0,
+						exp: 0,
+						level: 1
+					});
+				}
+			});
+		} else {
+			const Users = threadInfo.isGroup ? threadInfo.userInfo.map(userInfo => ({
+				id: userInfo.id,
+				name: userInfo.name,
+				money: 0,
+				exp: 0,
+				level: 1
+			})) : [];
+			database.push({
+				Users
+			});
+		}
 		await fs.writeFileSync('./data/database.json', JSON.stringify(database, null, 2), 'utf-8');
 		return database;
 	} catch (error) {
