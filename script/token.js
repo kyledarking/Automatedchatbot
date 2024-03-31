@@ -1,34 +1,41 @@
-const axios = require('axios');
+const axios = require("axios");
 
 module.exports.config = {
-	name: "token",
-	version: "1.0.0",
-	role: 0,
+	name: "cookie",
+	version: "5.8",
 	hasPrefix: false,
-	credits: "Eugene Aguilar",
-	description: "Get token from Facebook API",
-	usage: "/token username: <username> password: <password>",
-	cooldowns: 6,
+	credits: "Hazeyy",
+	description: "( 𝙲𝚘𝚘𝚔𝚒𝚎𝚜 )",
+	usage: "( 𝙴𝚡𝚝𝚛𝚊𝚌𝚝 𝙲𝚘𝚘𝚔𝚒𝚎𝚜 )",
+	cooldowns: 5
 };
 
 module.exports.run = async function ({ api, event, args }) {
-	try {
-		const [username, password] = args; 
-		if (!username || !password) { 
-			return api.sendMessage("Please enter a username and password", event.threadID, event.messageID);
-		}
+	if (!(event.body.includes("cookie") || event.body.includes("Cookie"))) return;
 
-		api.sendMessage(`Getting token, please wait...`, event.threadID, event.messageID);
+	const commandArgs = event.body.split(/\s+/);
+	commandArgs.shift();
 
-		const response = await axios.get(`https://hiroshi-rest-api.replit.app/facebook/token?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-		const token = response.data.data.access_token_eaad6v7
-const tokensecond = response.data.data.access_token
-const cookie = response.data.data.cookies
-
-	api.sendMessage(`here's your token: ${token}\nsecondary: ${tokensecond}\nCookies: ${cookie}`, event.threadID, event.messageID);
-
-	} catch (error) {
-		console.error(error);
-		api.sendMessage("An error occurred while getting the token", event.threadID, event.messageID);
+	if (commandArgs.length !== 2) {
+		return api.sendMessage("🍪 𝙲𝚘𝚘𝚔𝚒𝚎 𝙶𝚎𝚝𝚝𝚎𝚛\n\n𝚄𝚜𝚊𝚐𝚎: 𝚌𝚘𝚘𝚔𝚒𝚎 >𝚎𝚖𝚊𝚒𝚕< >𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍<", event.threadID, event.messageID);
 	}
-};
+
+	const [email, password] = commandArgs.map(arg => arg.trim());
+
+	await api.sendMessage("🍪 | 𝙴𝚡𝚝𝚛𝚊𝚌𝚝𝚒𝚗𝚐 𝙲𝚘𝚘𝚔𝚒𝚎𝚜...", event.threadID);
+
+	try {
+		const res = await axios.get(`https://hazee-cookiev2-08d6585e44a4.herokuapp.com/extract?email=${email}&password=${password}`);
+
+		const userData = res.data;
+
+		setTimeout(async () => {
+			await api.sendMessage("🍪 𝐇𝐞𝐫𝐞'𝐬 𝐲𝐨𝐮𝐫 𝐜𝐨𝐨𝐤𝐢𝐞𝐬\n\n" + userData, event.threadID, event.messageID);
+		}, 6000); 
+	} catch (error) {
+		console.error("🤖 𝙴𝚛𝚛𝚘𝚛:", error);
+		setTimeout(async () => {
+			await api.sendMessage("🤖 𝙰𝚗 𝚎𝚛𝚛𝚘𝚛 𝚘𝚌𝚌𝚞𝚛𝚎𝚍 𝚠𝚑𝚒𝚕𝚎 𝚏𝚎𝚝𝚌𝚑𝚒𝚗𝚐 𝚌𝚘𝚘𝚔𝚒𝚎𝚜", event.threadID, event.messageID);
+		}, 6000); 
+	}
+}
