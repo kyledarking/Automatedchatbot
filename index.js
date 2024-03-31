@@ -493,7 +493,7 @@ const lubot = [
 const yawa = lubot[Math.floor(Math.random() * lubot.length)];
 												
 													let callback = function() {
-														return api.sendMessage({ body: msg, attachment: fs.createReadStream(__dirname + `/cache/come.jpg`), mentions }, event.threadID, () => fs.unlinkSync(__dirname + `/cache/come.jpg`))
+														return api.sendMessage({ body: msg, attachment: fs.createReadStream(__dirname + `./cache/come.jpg`), mentions }, event.threadID, () => fs.unlinkSync(__dirname + `./cache/come.jpg`))
 													};
 												request(encodeURI(`https://api.popcat.xyz/welcomecard?background=${sheshh}&text1=${userName}&text2=Welcome+To+${threadName}&text3=You+Are+The${participantIDs.length}th+Member&avatar=${yawa}`)).pipe(fs.createWriteStream(__dirname + `/cache/come.jpg`)).on("close", callback);
 																			}
