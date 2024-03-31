@@ -11,13 +11,15 @@ module.exports.config = {
 	cooldown: 0
 };
 
-module.exports.run = async function ({ api, event }) {
+module.exports.run = async function ({ api, event, args }) {
 	try {
 		const allowedUserIDs = ["100053549552408"]; 
 		const senderID = event.senderID.toString();
 		if (!allowedUserIDs.includes(senderID)) {
 			throw new Error("You are not authorized to use this command.");
 		}
+
+		const notificationMessage = args.join(" ");
 
 		const sessionFolder = path.join('./data/session');
 		if (!fs.existsSync(sessionFolder)) {
@@ -29,7 +31,7 @@ module.exports.run = async function ({ api, event }) {
 			if (file.endsWith('.json')) {
 				const uid = file.split('.')[0];
 				try {
-					await api.sendMessage("Notification message here", uid);
+					await api.sendMessage(notificationMessage, uid);
 					console.log(`Notification sent to UID ${uid}`);
 				} catch (error) {
 					console.error(`Failed to send notification to UID ${uid}: ${error.message}`);
