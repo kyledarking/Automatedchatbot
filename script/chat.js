@@ -52,11 +52,11 @@ module.exports.run = async function({ api, event, args }) {
 	}
 
 	if (isAdmin) {
-		if (args[0] === "off") { // Changed "target" to "args"
+		if (args[0] === "off") { 
 			chat[String(event.threadID)] = true;
 			writeFileSync(path, JSON.stringify(chat), 'utf-8');
 			return api.sendMessage(`🛡️ | Chat off has been activated. The bot will now remove non-admin members from the group when they chat.`, event.threadID);
-		} else if (args[0] === "on") { // Changed "target" to "args"
+		} else if (args[0] === "on") { 
 			chat[String(event.threadID)] = false;
 			writeFileSync(path, JSON.stringify(chat), 'utf-8');
 			return api.sendMessage(`✅  | Chat off has been deactivated. The bot will no longer remove members when they chat.`, event.threadID);
