@@ -1,32 +1,36 @@
-const { get } = require('axios');
+const axios = require('axios');
 
 module.exports.config = {
-	name: "ai",
-	version: "1.0.0",
-	role: 0,
-	hasPrefix: false,
-	credits: "Deku",
-	description: "Talk to AI with continuous conversation.",
-	aliases:  [],
-	usages: "[prompt]",
-	cooldown: 0,
+    name: "ai",
+    version: 1.0,
+    credits: "Otin",
+    description: "AI",
+    hasPrefix: false,
+    usages: "{pn} [prompt]",
+    aliases: ["ai"],
+    cooldown: 0,
 };
 
-module.exports.run = async function({ api, event, args }) {
-	function sendMessage(msg) {
-		api.sendMessage(msg, event.threadID, event.messageID);
-	}
+module.exports.run = async function ({ api, event, args }) {
+    try {
+        const prompt = args.join(" ");
+        if (!prompt) {
+            await api.sendMessage("🤖 CHURCHILL 𝗔𝗜\n\n𝙷𝚎𝚢 𝙸'𝚖 𝚢𝚘𝚞𝚛 𝚟𝚒𝚛𝚝𝚞𝚊𝚕 𝚊𝚜𝚜𝚒𝚜𝚝𝚊𝚗𝚝, 𝚊𝚜𝚔 𝚖𝚎 𝚊 𝚚𝚞𝚎𝚜𝚝𝚒𝚘𝚗.", event.threadID);
+            return;
+        }
 
-	if (!args[0]) return sendMessage('Please provide a question first.');
+        api.setMessageReaction("🔎", event.messageID, (err) => {}, true);
+        const response = await axios.get(`https://sandipbaruwal.onrender.com/gpt?prompt=${encodeURIComponent(prompt)}`);
+        api.setMessageReaction("✅", event.messageID, (err) => {}, true);
+        const answer = response.data.answer;
 
-	const prompt = args.join(" ");
-	const url = `https://deku-rest-api.replit.app/gpt4?prompt=${encodeURIComponent(prompt)}&uid=${event.senderID}`;
-
-	try {
-		const response = await get(url);
-		const data = response.data;
-		return sendMessage(data.gpt4);
-	} catch (error) {
-		return sendMessage(error.message);
-	}
-}
+        await api.sendMessage('🤖 𝗖𝗛𝗨𝗥𝗖𝗛𝗜𝗟𝗟 𝗔𝗜' + answer, event.threadID);
+        
+        // Credits and developer link
+        const creditsMessage = "The bot was created by 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹\nDev link: https://www.facebook.com/profile.php?id=100087212564100";
+        await api.sendMessage(creditsMessage, event.threadID);
+    } catch (error) {
+        console.error("⚠️ | Error Please Contact the Developer for an Error\n\n-fblink: https://www.facebook.com/jaymar.dev.00", error.message);
+        api.setMessageReaction("⚠️", event.messageID, (err) => {}, true);
+    }
+};
