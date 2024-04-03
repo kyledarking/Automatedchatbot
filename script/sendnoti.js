@@ -21,7 +21,12 @@ module.exports.run = async function ({ api, event, args, admin }) {
 	async function sendMessage(thread) {
 		try {
 			await api.sendMessage(
-`🟢🟡🔴\n ----------------\n『 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐓𝐈𝐎𝐍 』\n\n ----------------\n𝗠𝗲𝘀𝘀𝗮𝗴𝗲:「${custom}」\n _________________________`,
+`𝙉𝙊𝙏𝙄𝘾𝙀 𝙁𝙍𝙊𝙈 𝘿𝙀𝙑𝙀𝙇𝙊𝙋𝙀𝙍
+ ----------------
+ Developer Name: @${event.senderID} (𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 𝗮𝗯𝗶𝗻𝗴)
+ ---------------
+
+『𝗡𝗼𝘁𝗶𝗰𝗲』"${custom}"`,
 				thread.threadID
 			);
 			sentCount++;
