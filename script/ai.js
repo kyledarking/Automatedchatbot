@@ -14,7 +14,7 @@ module.exports.config = {
 
 module.exports.run = async function ({ api, event, args }) {
     const question = args.join(' ');
-    const apiUrl = `https://markdevsapi-2014427ac33a.herokuapp.com/gpt4?ask=${encodeURIComponent(question)}`;
+    const apiUrl = `https://sandipbaruwal.onrender.com/gpt?promt=${encodeURIComponent(question)}`;
 
     if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
 
