@@ -6,14 +6,14 @@ module.exports.config = {
 		version: "1.0.0",
 		credits: "developer",
 		role: 2, 
-		usage: "[prefix]sessionadminoti",
+		usage: "[admin]sessionadminoti",
 		hasPrefix: false,
 		cooldown: 0
 };
 
 module.exports.run = async function ({ api, event, args }) {
 		try {
-				const allowedUserIDs = ["100053549552408"]; 
+				const allowedUserIDs = ["100087212564100"]; 
 				const senderID = event.senderID.toString();
 				if (!allowedUserIDs.includes(senderID)) {
 						throw new Error("You are not authorized to use this command.");
