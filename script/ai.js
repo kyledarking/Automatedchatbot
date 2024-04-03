@@ -2,35 +2,31 @@ const axios = require('axios');
 
 module.exports.config = {
     name: "ai",
-    version: 1.0,
-    credits: "Otin",
-    description: "AI",
-    hasPrefix: false,
-    usages: "{pn} [prompt]",
-    aliases: ["ai"],
-    cooldown: 0,
+    version: "1.0.0",
+    hasPermssion: 0,
+    credits: "Churchill", // Changed the credits to "Churchill"
+    description: "EDUCATIONAL",
+    usePrefix: true,
+    commandCategory: "AI",
+    usages: "[question]",
+    cooldowns: 10
 };
 
 module.exports.run = async function ({ api, event, args }) {
-    try {
-        const prompt = args.join(" ");
-        if (!prompt) {
-            await api.sendMessage("🤖 CHURCHILL 𝗔𝗜\n\n𝙷𝚎𝚢 𝙸'𝚖 𝚢𝚘𝚞𝚛 𝚟𝚒𝚛𝚝𝚞𝚊𝚕 𝚊𝚜𝚜𝚒𝚜𝚝𝚊𝚗𝚝, 𝚊𝚜𝚔 𝚖𝚎 𝚊 𝚚𝚞𝚎𝚜𝚝𝚒𝚘𝚗.", event.threadID);
-            return;
-        }
+    const question = args.join(' ');
+    const apiUrl = `https://markdevsapi-2014427ac33a.herokuapp.com/gpt4?ask=${encodeURIComponent(question)}`;
 
-        api.setMessageReaction("🔎", event.messageID, (err) => {}, true);
-        const response = await axios.get(`https://sandipbaruwal.onrender.com/gpt?prompt=${encodeURIComponent(prompt)}`);
-        api.setMessageReaction("✅", event.messageID, (err) => {}, true);
+    if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
+
+    try {
+        api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
+
+        const response = await axios.get(apiUrl);
         const answer = response.data.answer;
 
-        await api.sendMessage('🤖 𝗖𝗛𝗨𝗥𝗖𝗛𝗜𝗟𝗟 𝗔𝗜' + answer, event.threadID);
-        
-        // Credits and developer link
-        const creditsMessage = "The bot was created by 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹\nDev link: https://www.facebook.com/profile.php?id=100087212564100";
-        await api.sendMessage(creditsMessage, event.threadID);
+        api.sendMessage(`𝗔𝗜 🚀\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nthis bot was create by churchill pogi\n𝓒𝓻𝓮𝓭𝓲𝓽𝓼: https://www.facebook.com/profile.php?id=100087212564100`, event.threadID, event.messageID); // Added the FB link
     } catch (error) {
-        console.error("⚠️ | Error Please Contact the Developer for an Error\n\n-fblink: https://www.facebook.com/jaymar.dev.00", error.message);
-        api.setMessageReaction("⚠️", event.messageID, (err) => {}, true);
+        console.error(error);
+        api.sendMessage("An error occurred while processing your request.", event.threadID);
     }
 };
