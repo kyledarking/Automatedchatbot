@@ -1,11 +1,11 @@
 const axios = require('axios');
 
 module.exports.config = {
-	name: "axis",
+	name: "chill",
 	version: "1.0.0",
 	credits: "LiANE @nealianacagara",
 	role: 0,
-	usage: "[ prefix ]axis [prompt]",
+	usage: "[ churchill ]chill [prompt]",
 	hasPrefix: false,
 	cooldowns: 0
 };
@@ -19,7 +19,7 @@ module.exports.run = async function ({ api, event, args }) {
 		if (query) {
 			api.setMessageReaction("⏳", event.messageID, (err) => console.log(err), true);
 			const processingMessage = await api.sendMessage(
-				`Asking 🤖 Axis (LLM). Please wait a moment...`,
+				`Asking 🤖 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 (LLM). Please wait a moment...`,
 				event.threadID
 			);
 
