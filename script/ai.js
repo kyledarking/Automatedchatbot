@@ -2,7 +2,7 @@ const { get } = require('axios');
 let url = "https://deku-rest-api.replit.app";
 
 module.exports.config = {
-    name: "ai",
+    name: "Ai",
     version: "1.0.0",
     role: 0,
     hasPrefix: false,
@@ -24,7 +24,7 @@ module.exports.run = async function({ api, event, args }) {
 
     try {
         const response = await get(`${url}/gpt3?prompt=${encodeURIComponent(prompt)}&uid=${event.senderID}`);
-        const data = response.data;
+        const data = response.data.data;
         const finalMessage = `${data}\n\n𝘁𝗵𝗲 𝗯𝗼𝘁 𝘄𝗮𝘀 𝗰𝗿𝗲𝗮𝘁𝗲 𝗯𝘆 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 𝗽𝗼𝗴𝗶\n𝗗𝗲𝘃 𝗹𝗶𝗻𝗸: https://www.facebook.com/profile.php?id=100087212564100`;
         return sendMessage(finalMessage);
     } catch (error) {
