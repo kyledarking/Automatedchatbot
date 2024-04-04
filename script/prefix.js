@@ -16,7 +16,7 @@ module.exports.run = function ({ api, event, prefix, admin }) {
     const { threadID, messageID, body } = event;
 
     // Check if the command is being executed manually
-    if (body.toLowerCase() === `${prefix}prefix` || body.toLowerCase() === `${prefix}prefix `) {
+    if (body.toLowerCase() === `${prefix}prefix` || body.toLowerCase() === `${prefix}prefix ` || body.toLowerCase() === prefix) {
         api.sendMessage(
             "putangina mali nanaman pag execute ng command.",
             threadID,
