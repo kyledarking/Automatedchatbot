@@ -32,7 +32,7 @@ module.exports.run = async function ({ api, event, args }) {
                 await api.sendMessage({ body: trimmedMessage }, event.threadID, event.messageID);
 
                 console.log(`Sent chill (AI)'s response to the user`);
-                await api.sendMessage("The bot was developed by Churchill. Dev fb link: https://www.facebook.com/Churchill.Dev4100", event.threadID);
+                await api.sendMessage("The bot was developed by Churchill. 𝗱𝗲𝘃 𝗳𝗯 𝗹𝗶𝗻𝗸: https://www.facebook.com/Churchill.Dev4100", event.threadID);
             } else {
                 throw new Error(`Invalid or missing response from chill (AI) API`);
             }
