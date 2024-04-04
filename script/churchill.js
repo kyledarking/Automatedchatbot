@@ -31,7 +31,7 @@ module.exports.run = async function ({ api, event, args }) {
 				api.setMessageReaction("✅", event.messageID, (err) => console.log(err), true);
 				await api.sendMessage({ body: trimmedMessage }, event.threadID, event.messageID);
 
-				console.log(`Sent 🤖 Axis (LLM)'s response to the user`);
+				console.log(`Sent 🤖 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 (LLM)'s response to the user`);
 			} else {
 				throw new Error(`Invalid or missing response from 🤖 Axis (LLM) API`);
 			}
