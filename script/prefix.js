@@ -7,7 +7,7 @@ module.exports.config = {
     credits: "cliff",
     description: "Display the prefix of your bot",
     hasPrefix: false,
-    usages: "prefix",
+    usages: 'prefix [promt]',
     cooldown: 5,
     aliases: ["prefix", "Prefix", "PREFIX", "prefi"],
 };
