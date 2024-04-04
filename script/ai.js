@@ -20,7 +20,7 @@ module.exports.run = async function({ api, event, args }) {
 		if (!args[0]) return sendMessage('Please provide a question first.');
 
 		const prompt = args.join(" ");
-		const url = `https://hazee-gpt4.onrender.com/gpt?content=${encodeURIComponent(prompt)}`;
+		const url = `https://sandipbaruwal.onrender.com/gpt?prompt=${encodeURIComponent(prompt)}`;
 
 		try {
 				const response = await get(url);
