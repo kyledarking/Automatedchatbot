@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 module.exports.config = {
-		name: 'hercai',
+		name: 'ai',
 		version: '1.0.0',
 		role: 0,
 		hasPrefix: false,
@@ -13,7 +13,7 @@ module.exports.config = {
 
 module.exports.run = async function({ api, event, args }) {
 		if (!args[0]) {
-				api.sendMessage("Please provide a question or statement after 'hercai'. For example: hercai What is the capital of France?", event.threadID);
+				api.sendMessage("Please provide a question or statement after 'churchill'. For example: ai What is the capital of France?", event.threadID);
 				return;
 		}
 
