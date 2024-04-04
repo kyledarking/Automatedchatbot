@@ -9,7 +9,7 @@ module.exports.config = {
 		hasPrefix: false,
 		usages: "prefix",
 		cooldown: 5,
-		aliases: ["prefi", "Prefix", "PREFIX", "prefix"],
+		aliases: ["Prefix", "PREFIX", "prefix"],
 };
 
 module.exports.run = function ({ api, event, prefix, admin }) {
