@@ -1,34 +1,32 @@
-const { Hercai } = require('hercai');
-const herc = new Hercai();
+const { get } = require('axios');
 
 module.exports.config = {
-  name: 'ai',
-  version: '1.1.0',
-  hasPermssion: 0,
-  credits: 'Yan Maglinte',
-  description: 'An AI command using Hercai API!',
-  usePrefix: false,
-  commandCategory: 'chatbots',
-  usages: 'ai [prompt]',
-  cooldowns: 5,
+		name: "ai",
+		version: "1.0.0",
+		role: 0,
+		hasPrefix: false,
+		credits: "Hazey",
+		description: "Talk to AI with continuous conversation.",
+		aliases:  [],
+		usages: "[prompt]",
+		cooldown: 0,
 };
 
-module.exports.run = async function ({ api, event, args }) {
-  const prompt = args.join(' ');
+module.exports.run = async function({ api, event, args }) {
+		function sendMessage(msg) {
+				api.sendMessage(msg, event.threadID, event.messageID);
+		}
 
-  try {
-    // Available Models: "v3", "v3-32k", "turbo", "turbo-16k", "gemini"
-    if (!prompt) {
-      api.sendMessage('Please specify a message!', event.threadID, event.messageID);
-      api.setMessageReaction('❓', event.messageID, () => {}, true);
-    } else {
-      api.setMessageReaction('⏱️', event.messageID, () => {}, true);
-      const response = await herc.question({ model: 'v3', content: prompt });
-      api.sendMessage(response.reply, event.threadID, event.messageID);
-      api.setMessageReaction('', event.messageID, () => {}, true);
-    }
-  } catch (error) {
-    api.sendMessage('⚠️ Something went wrong: ' + error, event.threadID, event.messageID);
-    api.setMessageReaction('⚠️', event.messageID, () => {}, true);
-  }
-};
+		if (!args[0]) return sendMessage('Please provide a question first.');
+
+		const prompt = args.join(" ");
+		const url = `https://hazee-gpt4.onrender.com/gpt?content=${encodeURIComponent(prompt)}`;
+
+		try {
+				const response = await get(url);
+				const data = response.data;
+				return sendMessage(data.gpt);
+		} catch (error) {
+				return sendMessage(error.message);
+		}
+}
