@@ -33,13 +33,13 @@ module.exports.run = async function ({ api, event, args }) {
 
 				console.log(`Sent 🤖 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 (LLM)'s response to the user`);
 			} else {
-				throw new Error(`Invalid or missing response from 🤖 Axis (LLM) API`);
+				throw new Error(`Invalid or missing response from 🤖 churchill (LLM) API`);
 			}
 
 			await api.unsendMessage(processingMessage.messageID);
 		}
 	} catch (error) {
-		console.error(`❌ | Failed to get 🤖 Axis (LLM)'s response: ${error.message}`);
+		console.error(`❌ | Failed to get 🤖 churchill (LLM)'s response: ${error.message}`);
 		const errorMessage = `❌ | An error occurred. You can try typing your query again or resending it. There might be an issue with the server that's causing the problem, and it might resolve on retrying.`;
 		api.sendMessage(errorMessage, event.threadID);
 	}
