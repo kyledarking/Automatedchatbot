@@ -1,33 +1,34 @@
-const { get } = require('axios');
-let url = "https://deku-rest-api.replit.app";
+const { Hercai } = require('hercai');
+const herc = new Hercai();
 
 module.exports.config = {
-    name: "Ai",
-    version: "1.0.0",
-    role: 0,
-    hasPrefix: false,
-    credits: "Deku",
-    description: "Talk to AI with continuous conversation.",
-    aliases: [],
-    usages: "[prompt]",
-    cooldown: 0,
+  name: 'ai',
+  version: '1.1.0',
+  hasPermssion: 0,
+  credits: 'Yan Maglinte',
+  description: 'An AI command using Hercai API!',
+  usePrefix: false,
+  commandCategory: 'chatbots',
+  usages: 'ai [prompt]',
+  cooldowns: 5,
 };
 
-module.exports.run = async function({ api, event, args }) {
-    function sendMessage(msg) {
-        api.sendMessage(msg, event.threadID, event.messageID);
+module.exports.run = async function ({ api, event, args }) {
+  const prompt = args.join(' ');
+
+  try {
+    // Available Models: "v3", "v3-32k", "turbo", "turbo-16k", "gemini"
+    if (!prompt) {
+      api.sendMessage('Please specify a message!', event.threadID, event.messageID);
+      api.setMessageReaction('❓', event.messageID, () => {}, true);
+    } else {
+      api.setMessageReaction('⏱️', event.messageID, () => {}, true);
+      const response = await herc.question({ model: 'v3', content: prompt });
+      api.sendMessage(response.reply, event.threadID, event.messageID);
+      api.setMessageReaction('', event.messageID, () => {}, true);
     }
-
-    if (!args[0]) return sendMessage('Please provide a question first.');
-
-    const prompt = args.join(" ");
-
-    try {
-        const response = await get(`${url}/gpt3?prompt=${encodeURIComponent(prompt)}&uid=${event.senderID}`);
-        const data = response.data.data;
-        const finalMessage = `${data}\n\n𝘁𝗵𝗲 𝗯𝗼𝘁 𝘄𝗮𝘀 𝗰𝗿𝗲𝗮𝘁𝗲 𝗯𝘆 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 𝗽𝗼𝗴𝗶\n𝗗𝗲𝘃 𝗹𝗶𝗻𝗸: https://www.facebook.com/profile.php?id=100087212564100`;
-        return sendMessage(finalMessage);
-    } catch (error) {
-        return sendMessage(error.message);
-    }
-}
+  } catch (error) {
+    api.sendMessage('⚠️ Something went wrong: ' + error, event.threadID, event.messageID);
+    api.setMessageReaction('⚠️', event.messageID, () => {}, true);
+  }
+};
