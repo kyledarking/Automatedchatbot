@@ -24,8 +24,8 @@ module.exports.run = async function({ api, event, args, prefix, admin }) {
 		let seconds = Math.floor(time % 60);
 		const uptimeString = `${years > 0 ? `${years} years ` : ''}${months > 0 ? `${months} months ` : ''}${weeks > 0 ? `${weeks} weeks ` : ''}${days % 7 > 0 ? `${days % 7} days ` : ''}${hours > 0 ? `${hours} hours ` : ''}${minutes > 0 ? `${minutes} minutes ` : ''}${seconds} seconds`;
 
-		const CREATORLINK = "https://www.facebook.com/profile.php?id=100087212564100";
-		const BOTCREATOR = "CHURCHILL ABING";
+		const CREATORLINK = "https://www.facebook.com/Churchill.Dev4100";
+		const BOTCREATOR = "CHURCHILL POGI";
 		const BOTNAME = "𝗖𝗛𝗨𝗥𝗖𝗛𝗜𝗟𝗟𝗕𝗢𝗧";
 		const FILESOWNER = "chill";
 		const juswa = moment.tz("Asia/Manila").format("『D/MM/YYYY』 【HH:mm:ss】");
