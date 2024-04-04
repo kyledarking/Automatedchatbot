@@ -8,8 +8,7 @@ module.exports.config = {
     description: "Display the prefix of your bot",
     hasPrefix: false,
     usages: "prefix",
-    cooldown: 5,
-    aliases: ["prefix", "Prefix", "PREFIX"],
+    cooldown: 5
 };
 
 module.exports.run = function ({ api, event, prefix, admin }) {
