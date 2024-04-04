@@ -1,3 +1,4 @@
+const fs = require("axios");
 module.exports = {
 	config: {
 			name: "haha",
