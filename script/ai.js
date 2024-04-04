@@ -1,11 +1,11 @@
 const axios = require('axios');
 
 module.exports.config = {
-    name: "luci",
+    name: "ai",
     version: "1.0.0",
     credits: "JayMar", // credits to liane cagara!!!!
     role: 0,
-    usage: "luci [prompt]",
+    usage: "ai [prompt]",
     hasPrefix: false,
     cooldowns: 0
 };
