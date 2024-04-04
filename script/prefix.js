@@ -9,7 +9,7 @@ module.exports.config = {
     hasPrefix: false,
     usages: "prefix",
     cooldown: 5,
-    aliases: ["prefix", "Prefix", "PREFIX", "prefi"],
+    aliases: ["prefix", "Prefix", "PREFIX",],
 };
 
 module.exports.run = function ({ api, event, prefix, admin }) {
@@ -18,7 +18,7 @@ module.exports.run = function ({ api, event, prefix, admin }) {
     // Check if the command is being executed manually
     if (body.toLowerCase() === `${prefix}prefix` || body.toLowerCase() === `${prefix}prefix `) {
         api.sendMessage(
-            "This command cannot be executed manually.",
+            "putangina mali nanaman pag execute ng command.",
             threadID,
             messageID
         );
