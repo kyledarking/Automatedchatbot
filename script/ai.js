@@ -1,32 +1,33 @@
-const axios = require('axios');
+const { get } = require('axios');
+let url = "https://deku-rest-api.replit.app";
 
 module.exports.config = {
-    name: "ai",
+    name: "Ai",
     version: "1.0.0",
-    hasPermssion: 0,
-    credits: "Churchill", // Changed the credits to "Churchill"
-    description: "EDUCATIONAL",
-    usePrefix: true,
-    commandCategory: "AI",
-    usages: "[question]",
-    cooldowns: 10
+    role: 0,
+    hasPrefix: false,
+    credits: "Deku",
+    description: "Talk to AI with continuous conversation.",
+    aliases: [],
+    usages: "[prompt]",
+    cooldown: 0,
 };
 
-module.exports.run = async function ({ api, event, args }) {
-    const question = args.join(' ');
-    const apiUrl = `https://sandipbaruwal.onrender.com/gpt?promt=${encodeURIComponent(question)}`;
+module.exports.run = async function({ api, event, args }) {
+    function sendMessage(msg) {
+        api.sendMessage(msg, event.threadID, event.messageID);
+    }
 
-    if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
+    if (!args[0]) return sendMessage('Please provide a question first.');
+
+    const prompt = args.join(" ");
 
     try {
-        api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
-
-        const response = await axios.get(apiUrl);
-        const answer = response.data.answer;
-
-        api.sendMessage(`𝗔𝗜 🚀\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nthis bot was create by churchill pogi\n𝗰𝗿𝗲𝗱𝗶𝘁𝘀: https://www.facebook.com/profile.php?id=100087212564100`, event.threadID, event.messageID); // Added the FB link
+        const response = await get(`${url}/gpt3?prompt=${encodeURIComponent(prompt)}&uid=${event.senderID}`);
+        const data = response.data;
+        const finalMessage = `${data}\n\n𝘁𝗵𝗲 𝗯𝗼𝘁 𝘄𝗮𝘀 𝗰𝗿𝗲𝗮𝘁𝗲 𝗯𝘆 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 𝗽𝗼𝗴𝗶\n𝗗𝗲𝘃 𝗹𝗶𝗻𝗸: https://www.facebook.com/profile.php?id=100087212564100`;
+        return sendMessage(finalMessage);
     } catch (error) {
-        console.error(error);
-        api.sendMessage("An error occurred while processing your request.", event.threadID);
+        return sendMessage(error.message);
     }
-};
+}
