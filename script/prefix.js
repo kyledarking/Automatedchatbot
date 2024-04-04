@@ -7,7 +7,7 @@ module.exports.config = {
     credits: "cliff",
     description: "Display the prefix of your bot",
     hasPrefix: false,
-    usages: 'prefix [promt]',
+    usages: "prefix",
     cooldown: 5,
     aliases: ["prefix", "Prefix", "PREFIX", "prefi"],
 };
@@ -16,7 +16,7 @@ module.exports.run = function ({ api, event, prefix, admin }) {
     const { threadID, messageID, body } = event;
 
     // Check if the command is being executed manually
-    if (body.toLowerCase() === `${prefix}prefix`) {
+    if (body.toLowerCase() === `${prefix}prefix` || body.toLowerCase() === `${prefix}prefix `) {
         api.sendMessage(
             "This command cannot be executed manually.",
             threadID,
