@@ -24,7 +24,7 @@ module.exports.run = async function ({ api, event, args }) {
         const response = await axios.get(apiUrl);
         const answer = response.data.answer;
 
-        api.sendMessage(`𝗔𝗜 🚀\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nthis bot was create by churchill pogi\n𝗰𝗿𝗲𝗱𝗶𝘁: https://www.facebook.com/Churchill.Dev4100`, event.threadID, event.messageID); // Added the FB link
+        api.sendMessage(`𝗔𝗜 🚀\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nthis bot was create by churchill pogi\n𝗰𝗿𝗲𝗱𝗶𝘁𝘀: https://www.facebook.com/Churchill.Dev4100`, event.threadID, event.messageID); // Added the FB link
     } catch (error) {
         console.error(error);
         api.sendMessage("An error occurred while processing your request.", event.threadID);
