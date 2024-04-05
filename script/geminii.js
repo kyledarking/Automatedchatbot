@@ -1,36 +1,33 @@
+const axios = require("axios");
+
 module.exports.config = {
-	name: "gemini",
-	role: 0,
-	credits: "Deku", //https://facebook.com/joshg101
-	description: "Talk to Gemini (conversational)",
-	hasPrefix: false,
-	version: "5.6.7",
-	aliases: ["bard"],
-	usage: "gemini [prompt]"
+    name: "gemini",
+    version: "1.0.0",
+    credits: "Churchill Pogi", 
+    role: 0,
+    description: "Gets a response from the Gemini API.",
+    usage: "gemini [query]",
+    hasPrefix: false,
+    cooldowns: 0
 };
 
 module.exports.run = async function ({ api, event, args }) {
-	const axios = require("axios");
-	let prompt = args.join(" "),
-		uid = event.senderID,
-		url;
-	if (!prompt) return api.sendMessage(`Please enter a prompt.`, event.threadID);
-	api.sendTypingIndicator(event.threadID);
-	try {
-		const geminiApi = `jerai.onrender.com/chat?query=whatmodelareyou&model=bard`;
-		if (event.type == "message_reply") {
-			if (event.messageReply.attachments[0]?.type == "photo") {
-				url = encodeURIComponent(event.messageReply.attachments[0].url);
-				const res = (await axios.get(`${geminiApi}/gemini?prompt=${prompt}&url=${url}&uid=${uid}`)).data;
-				return api.sendMessage(res.gemini, event.threadID);
-			} else {
-				return api.sendMessage('Please reply to an image.', event.threadID);
-			}
-		}
-		const response = (await axios.get(`${geminiApi}/gemini?prompt=${prompt}&uid=${uid}`)).data;
-		return api.sendMessage(response.gemini, event.threadID);
-	} catch (error) {
-		console.error(error);
-		return api.sendMessage('❌ | An error occurred. You can try typing your query again or resending it. There might be an issue with the server that\'s causing the problem, and it might resolve on retrying.', event.threadID);
-	}
+    try {
+        const query = args.join(" ");
+        const model = "bard"; // You can change the model here
+        const apiUrl = `https://jerai.onrender.com/chat?query=${encodeURIComponent(query)}&model=${model}`;
+        const response = await axios.get(apiUrl);
+
+        if (response.data && response.data.message) {
+            const geminiResponse = response.data.message;
+            api.sendMessage(geminiResponse, event.threadID);
+            console.log(`Sent Gemini API response to user: ${geminiResponse}`);
+        } else {
+            throw new Error(`Invalid or missing response from the Gemini API`);
+        }
+    } catch (error) {
+        console.error(`❌ | Failed to get Gemini API response: ${error.message}`);
+        const errorMessage = `❌ | An error occurred while fetching the Gemini API response. Please try again later.`;
+        api.sendMessage(errorMessage, event.threadID);
+    }
 };
