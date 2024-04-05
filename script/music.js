@@ -4,8 +4,8 @@ module.exports.config = {
  role: 0,
  credits: "Grey",
  description: "Play a song",
- aliases: ["sing"],
-cooldowns: 15,
+ aliases: ["sing", "song", "music"],
+cooldowns: 0,
 hasPrefix: false,
 	usage: "",
 };
