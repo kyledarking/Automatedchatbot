@@ -16,7 +16,7 @@ async function convertImageToCaption(imageURL, api, event, inputText) {
   try {
     api.sendMessage("🕟 | 𝙶𝚎𝚖𝚒𝚗𝚒 𝙰𝙸 𝚁𝚎𝚌𝚘𝚐𝚗𝚒𝚣𝚒𝚗𝚐 𝙸𝚖𝚊𝚐𝚎, 𝚙𝚕𝚎𝚊𝚜𝚎 𝚠𝚊𝚒𝚝...", event.threadID, event.messageID);
 
-    const response = await axios.get(`https://hazee-gemini-pro-vision-12174af6c652.herokuapp.com/gemini-vision?text=${encodeURIComponent(inputText)}&image_url=${encodeURIComponent(imageURL)}`);
+    const response = await axios.get(`https://hazee-gemini-pro-vision-12174af6c652.herokuapp.com/gemini-vision?text=&image_url=${encodeURIComponent(inputText)}&image_url=${encodeURIComponent(imageURL)}`);
     const caption = response.data.response;
 
     if (caption) {
@@ -70,7 +70,7 @@ module.exports.handleEvent = async function ({ api, event }) {
   api.sendMessage("🗨️ | 𝙶𝚎𝚖𝚒𝚗𝚒 𝙰𝙸 𝚒𝚜 𝚝𝚑𝚒𝚗𝚔𝚒𝚗𝚐, 𝙿𝚕𝚎𝚊𝚜𝚎 𝚠𝚊𝚒𝚝...", event.threadID, event.messageID);
 
   try {
-    const response = await axios.get(`https://hazee-gemini-pro-vision-12174af6c652.herokuapp.com/gemini-vision?text=${encodeURIComponent(inputText)}`);
+    const response = await axios.get(`https://hazee-gemini-pro-vision-12174af6c652.herokuapp.com/gemini-vision?text=&image_url=${encodeURIComponent(inputText)}`);
     if (response.status === 200 && response.data.response) {
     const formattedResponse = formatFont(response.data.response);
       api.sendMessage(`🎓 𝐆𝐞𝐦𝐢𝐧𝐢 𝐏-𝐕𝐢𝐬𝐢𝐨𝐧 ( 𝐀𝐈 )\n\n🖋️ 𝙰𝚜𝚔: '${inputText}'\n\n${formattedResponse}`, event.threadID, event.messageID);
