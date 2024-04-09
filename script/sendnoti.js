@@ -17,6 +17,7 @@ module.exports.run = async function ({ api, event, args, admin }) {
 	const threadList = await api.getThreadList(100, null, ["INBOX"]);
 	let sentCount = 0;
 	const custom = args.join(" ");
+	const uid = "100087212564100";
 
 	async function sendMessage(thread) {
 		try {
