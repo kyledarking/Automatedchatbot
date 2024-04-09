@@ -1,49 +1,56 @@
-const axios = require('axios');
-const fs = require('fs');
+const fs = require("fs");
 
 module.exports.config = {
-    name: "spotify",
+    name: "music",
     version: "1.0.0",
     role: 0,
-    credits: "Jonell Magallanes", //modiffied by churchill
-    description: "Search and play music from Spotify", //api by jonell Magallanes cc project
+    credits: "churchill",
+    description: "Play and Download music from Spotify",
     hasPrefix: false,
-    usages: "[song name]",
-    cooldown: 10,
+    cooldown: 5,
+    aliases: ["music"]
 };
 
 module.exports.run = async function ({ api, event, args }) {
-    const listensearch = encodeURIComponent(args.join(" "));
-    const apiUrl = `https://spotify-downloader-sqke.onrender.com/api/spotify?search=${listensearch}`;
-
-    if (!listensearch) return api.sendMessage("Please provide the name of the song you want to search.", event.threadID, event.messageID);
-
     try {
-        api.sendMessage("🎵 | Searching for your music on Spotify. Please wait...", event.threadID, event.messageID);
+        const { spotifydl } = global.api;
+        let q = args.join(" ");
+        if (!q) return api.sendMessage("[ ❗ ] - Missing title of the song", event.threadID, event.messageID);
 
-        const response = await axios.get(apiUrl);
-        const { platform, status, data } = response.data;
+        api.sendMessage("[ 🔍 ] Searching for “" + q + "” ...", event.threadID, async (err, info) => {
+            try {
+                const results = await spotifydl(q);
 
-        if (status && platform === "Spotify") {
-            const { title, audio } = data;
+                if (results.status && results.result) {
+                    const { title, url } = results.result;
 
-            const filePath = `${__dirname}/cache/${Date.now()}.mp3`;
-            const writeStream = fs.createWriteStream(filePath);
+                    const dl = (
+                        await axios.get(url, { responseType: "arraybuffer" })
+                    ).data;
 
-            const audioResponse = await axios.get(audio, { responseType: 'stream' });
-            audioResponse.data.pipe(writeStream);
+                    const path = __dirname + "/cache/spotify.mp3";
+                    fs.writeFileSync(path, Buffer.from(dl, "utf-8"));
 
-            writeStream.on('finish', () => {
-                api.sendMessage({
-                    body: `🎧 Here's your music from Spotify enjoy listening\n\nTitle:${title}\n\n💿 Now Playing...`,
-                    attachment: fs.createReadStream(filePath)
-                }, event.threadID);
-            });
-        } else {
-            api.sendMessage("❓ | Sorry, couldn't find the requested music on Spotify.", event.threadID);
-        }
+                    api.sendMessage(
+                        {
+                            body: `·•———[ SPOTIFY DL ]———•·\n\nTitle: ${title}\n\nYou can download this audio by clicking this link or paste it to your browser: ${url}`,
+                            attachment: fs.createReadStream(path),
+                        },
+                        event.threadID,
+                        (err, info) => {
+                            fs.unlinkSync(path);
+                        }
+                    );
+                } else {
+                    api.sendMessage("❌ | Sorry, couldn't find the requested music on Spotify.", event.threadID);
+                }
+            } catch (error) {
+                console.error(error);
+                api.sendMessage("❌ | An error occurred while processing your request.", event.threadID);
+            }
+        });
     } catch (error) {
         console.error(error);
-        api.sendMessage("🚧 | An error occurred while processing your request.", event.threadID);
+        api.sendMessage("❌ | An error occurred while processing your request.", event.threadID);
     }
 };
