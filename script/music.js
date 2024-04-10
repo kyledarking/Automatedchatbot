@@ -1,57 +1,59 @@
-const axios = require("axios");
-const fs = require("fs");
-
+const path = require('path');
 module.exports.config = {
-    name: "music",
-    version: "1.0.2",
-    role: 0,
-    credits: "joshua deku",
-    description: "Play and Download music from Spotify",
-    hasPrefix: false,
-    cooldown: 5,
-    aliases: ["music"]
+	name: "music",
+	version: "1.0.0",
+	credits: "cliff",
+	role: 0,
+	aliases: ['play'],
+	cooldown: 0,
+	hasPrefix: false,
+	usage: "",
 };
-
-module.exports.run = async function ({ api, event, args }) {
-    try {
-        const { spotify, spotifydl } = require("betabotz-tools");
-        let q = args.join(" ");
-        if (!q) return api.sendMessage("[ ❗ ] - Missing title of the song", event.threadID, event.messageID);
-
-        api.sendMessage("[ 🔍 ] Searching for “" + q + "” ...", event.threadID, async (err, info) => {
-            try {
-                const r = await axios.get("https://lyrist.vercel.app/api/" + q);
-                const { lyrics, title } = r.data;
-                const results = await spotify(encodeURI(q));
-
-                let url = results.result.data[0].url;
-
-                const result1 = await spotifydl(url);
-
-                // No need for path variable if not used
-
-                const dl = (
-                    await axios.get(result1.result, { responseType: "arraybuffer" })
-                ).data;
-
-                // Removed writing to file
-
-                api.sendMessage(
-                    {
-                        body:
-                            "·•———[ SPOTIFY DL ]———•·\n\n" + "Title: " + title + "\nLyrics:\n\n" +
-                            lyrics +
-                            "\n\nYou can download this audio by clicking this link or paste it to your browser: " +
-                            result1.result,
-                    },
-                    event.threadID
-                );
-            } catch (error) {
-                console.error(error);
-                api.sendMessage("An error occurred while processing your request.", event.threadID);
-            }
-        });
-    } catch (s) {
-        api.sendMessage(s.message, event.threadID);
-    }
+module.exports.run = async function({
+	api,
+	event,
+	args
+}) {
+	const fs = require("fs-extra");
+	const ytdl = require("ytdl-core");
+	const yts = require("yt-search");
+	const musicName = args.join(' ');
+	if (!musicName) {
+		api.sendMessage(`To get started, type music and the title of the song you want.`, event.threadID, event.messageID);
+		return;
+	}
+	try {
+		api.sendMessage(`Searching for "${musicName}"...`, event.threadID, event.messageID);
+		const searchResults = await yts(musicName);
+		if (!searchResults.videos.length) {
+			return api.sendMessage("Can't find the search.", event.threadID, event.messageID);
+		} else {
+			const music = searchResults.videos[0];
+			const musicUrl = music.url;
+			const stream = ytdl(musicUrl, {
+				filter: "audioonly"
+			});
+			const time = new Date();
+			const timestamp = time.toISOString().replace(/[:.]/g, "-");
+			const filePath = path.join(__dirname, 'cache', `${timestamp}_music.mp3`);
+			stream.pipe(fs.createWriteStream(filePath));
+			stream.on('response', () => {});
+			stream.on('info', (info) => {});
+			stream.on('end', () => {
+				if (fs.statSync(filePath).size > 26214400) {
+					fs.unlinkSync(filePath);
+					return api.sendMessage('The file could not be sent because it is larger than 25MB.', event.threadID);
+				}
+				const message = {
+					body: `${music.title}`,
+					attachment: fs.createReadStream(filePath)
+				};
+				api.sendMessage(message, event.threadID, () => {
+					fs.unlinkSync(filePath);
+				}, event.messageID);
+			});
+		}
+	} catch (error) {
+		api.sendMessage('An error occurred while processing your request.', event.threadID, event.messageID);
+	}
 };
