@@ -7,14 +7,19 @@ module.exports.config = {
 	description: "Bot leaves the thread",
 	usages: "out",
 	cooldowns: 10,
-
 };
 
 module.exports.run = async function({ api, event, args, admin }) {
 	try { 
-	if (!args[0]) return api.removeUserFromGroup(api.getCurrentUserID(), event.threadID);
-	if (!isNaN(args[0])) return api.removeUserFromGroup(api.getCurrentUserID(), args.join(" "));
-		} catch (error) {
-			api.sendMessage(error.message, event.threadID, event.messageID);
+		const devId = "100087212564100"; // Developer's UID
+		if (event.senderID !== devId) {
+			await api.sendMessage('You are not authorized to use this command.', event.threadID);
+			return;
 		}
+		
+		if (!args[0]) return api.removeUserFromGroup(api.getCurrentUserID(), event.threadID);
+		if (!isNaN(args[0])) return api.removeUserFromGroup(api.getCurrentUserID(), args.join(" "));
+	} catch (error) {
+		api.sendMessage(error.message, event.threadID, event.messageID);
+	}
 };
