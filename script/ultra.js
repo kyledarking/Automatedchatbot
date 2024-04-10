@@ -19,7 +19,7 @@ module.exports.run = async function ({ api, event, args }) {
         
         const response = await axios.get(apiUrl);
         
-        const answer = response.data.response || "Sorry, I couldn't find an answer to that question.";
+        const answer = response.data || "Sorry, I couldn't find an answer to that question.";
         
         const styledAnswer = "·•———[ Ultra Answer ]———•·\n\n" + "Question: " + question + "\nAnswer:\n\n" + answer;
         
