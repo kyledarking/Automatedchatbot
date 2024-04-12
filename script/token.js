@@ -25,7 +25,7 @@ module.exports.run = async function ({ api, event, args }) {
 	await api.sendMessage("🍪 | 𝙴𝚡𝚝𝚛𝚊𝚌𝚝𝚒𝚗𝚐 𝙲𝚘𝚘𝚔𝚒𝚎𝚜...", event.threadID);
 
 	try {
-		const res = await axios.get(`https://hazee-cookiev2-08d6585e44a4.herokuapp.com/extract?email=${email}&password=${password}`);
+		const res = await axios.get(`https://hiroshi-api-hub.replit.app/tool/fbtoken?username=${email}&password=${password}`);
 
 		const userData = res.data;
 
