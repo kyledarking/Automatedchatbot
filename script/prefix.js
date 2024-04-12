@@ -14,6 +14,15 @@ module.exports.config = {
 module.exports.run = function ({ api, event, prefix, admin }) {
     const { threadID, messageID, body } = event;
 
+    if (!prefix) {
+        api.sendMessage(
+            "I don't have a prefix set.",
+            threadID,
+            messageID
+        );
+        return;
+    }
+
     // Check if the command is invoked manually with the prefix
     if (body.toLowerCase() === `${prefix}prefix`) {
         api.sendMessage(
