@@ -19,6 +19,8 @@ module.exports.run = async function ({ api, event, args }) {
     if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
 
     try {
+        api.setMessageReaction("🖕", event.messageID); // Auto-react with 🖕
+
         api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
 
         const response = await axios.get(apiUrl);
