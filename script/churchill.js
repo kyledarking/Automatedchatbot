@@ -28,8 +28,9 @@ module.exports.run = async function ({ api, event, args }) {
 
 			if (response.data && response.data.message) {
 				const trimmedMessage = response.data.message.trim();
+				const finalMessage = `${trimmedMessage}\n\n𝙘𝙧𝙚𝙙𝙞𝙩𝙨: https://www.facebook.com/Churchill.Dev4100`;
 				api.setMessageReaction("✅", event.messageID, (err) => console.log(err), true);
-				await api.sendMessage({ body: trimmedMessage }, event.threadID, event.messageID);
+				await api.sendMessage({ body: finalMessage }, event.threadID, event.messageID);
 
 				console.log(`Sent 🤖 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 (LLM)'s response to the user`);
 			} else {
