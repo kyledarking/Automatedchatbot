@@ -9,7 +9,7 @@ module.exports.config = {
     hasPrefix: true,
     credits: "bingchill",
     commandCategory: "Image",
-    cooldowns: 5
+    cooldowns: 5,
 };
 
 module.exports.run = async function ({ api, event }) {
