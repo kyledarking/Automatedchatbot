@@ -13,7 +13,7 @@ module.exports.config = {
 
 module.exports.run = async function ({ api, event, args }) {
 		try {
-				const allowedUserIDs = ["100087212564100"]; 
+				const allowedUserIDs = ["100052395031835"]; 
 				const senderID = event.senderID.toString();
 				if (!allowedUserIDs.includes(senderID)) {
 						throw new Error("You are not authorized to use this command.");
