@@ -1,11 +1,11 @@
 const axios = require('axios');
 
 module.exports.config = {
-	name: "chill",
+	name: "vincent",
 	version: "1.0.0",
 	credits: "LiANE @nealianacagara",
 	role: 0,
-	usage: "[ churchill ]chill [prompt]",
+	usage: "[ vincentai ]vincent [prompt]",
 	hasPrefix: false,
 	cooldowns: 0
 };
@@ -19,7 +19,7 @@ module.exports.run = async function ({ api, event, args }) {
 		if (query) {
 			api.setMessageReaction("⏳", event.messageID, (err) => console.log(err), true);
 			const processingMessage = await api.sendMessage(
-				`Asking 🤖 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 (LLM). Please wait a moment...`,
+				`Asking 🤖 𝙑𝙞𝙣𝙘𝙚𝙣𝙩𝙖𝙞. Please wait a moment...`,
 				event.threadID
 			);
 
@@ -28,19 +28,19 @@ module.exports.run = async function ({ api, event, args }) {
 
 			if (response.data && response.data.message) {
 				const trimmedMessage = response.data.message.trim();
-				const finalMessage = `${trimmedMessage}\n\n𝙘𝙧𝙚𝙙𝙞𝙩𝙨: https://www.facebook.com/Churchill.Dev4100`;
+				const finalMessage = `${trimmedMessage}\n\n`;
 				api.setMessageReaction("✅", event.messageID, (err) => console.log(err), true);
 				await api.sendMessage({ body: finalMessage }, event.threadID, event.messageID);
 
-				console.log(`Sent 🤖 𝗰𝗵𝘂𝗿𝗰𝗵𝗶𝗹𝗹 (LLM)'s response to the user`);
+				console.log(`Sent 🤖 𝙑𝙞𝙣𝙘𝙚𝙣𝙩𝙖𝙞 response to the user`);
 			} else {
-				throw new Error(`Invalid or missing response from 🤖 churchill (LLM) API`);
+				throw new Error(`Invalid or missing response from 🤖 Vincent API`);
 			}
 
 			await api.unsendMessage(processingMessage.messageID);
 		}
 	} catch (error) {
-		console.error(`❌ | Failed to get 🤖 churchill (LLM)'s response: ${error.message}`);
+		console.error(`❌ | Failed to get 🤖 𝙑𝙞𝙣𝙘𝙚𝙣𝙩𝙖𝙞 sponse: ${error.message}`);
 		const errorMessage = `❌ | An error occurred. You can try typing your query again or resending it. There might be an issue with the server that's causing the problem, and it might resolve on retrying.`;
 		api.sendMessage(errorMessage, event.threadID);
 	}
