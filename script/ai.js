@@ -6,7 +6,7 @@ module.exports.config = {
     hasPermssion: 0,
     credits: "Kyle", // Changed the credits to "Kyle"
     description: "EDUCATIONAL",
-    usePrefix: true,
+    usePrefix: false,
     commandCategory: "AI",
     usages: "[question]",
     cooldowns: 10
@@ -26,7 +26,7 @@ module.exports.run = async function ({ api, event, args }) {
         const response = await axios.get(apiUrl);
         const answer = response.data.answer;
 
-        api.sendMessage(`𝗩𝗜𝗡𝗖𝗘𝗡𝗧 𝗔𝗜🖊\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\n`, event.threadID, event.messageID); // Added the FB link
+        api.sendMessage(` 𝗔𝗜🖊\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\n`, event.threadID, event.messageID); // Added the FB link
     } catch (error) {
         console.error(error);
         api.sendMessage("An error occurred while processing your request.", event.threadID);
