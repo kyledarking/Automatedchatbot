@@ -1,11 +1,11 @@
 const axios = require('axios');
 
 module.exports.config = {
-	name: "vincent",
+	name: "kyleai",
 	version: "1.0.0",
 	credits: "LiANE @nealianacagara",
 	role: 0,
-	usage: "[ vincentai ]vincent [prompt]",
+	usage: "[ kyleai ]kyleai [prompt]",
 	hasPrefix: false,
 	cooldowns: 0
 };
@@ -19,7 +19,7 @@ module.exports.run = async function ({ api, event, args }) {
 		if (query) {
 			api.setMessageReaction("⏳", event.messageID, (err) => console.log(err), true);
 			const processingMessage = await api.sendMessage(
-				`Asking 🤖 𝙑𝙞𝙣𝙘𝙚𝙣𝙩𝙖𝙞. Please wait a moment...`,
+				`Asking 🤖 𝙆𝙔𝙇𝙀𝘼𝙄. Please wait a moment...`,
 				event.threadID
 			);
 
@@ -32,15 +32,15 @@ module.exports.run = async function ({ api, event, args }) {
 				api.setMessageReaction("✅", event.messageID, (err) => console.log(err), true);
 				await api.sendMessage({ body: finalMessage }, event.threadID, event.messageID);
 
-				console.log(`Sent 🤖 𝙑𝙞𝙣𝙘𝙚𝙣𝙩𝙖𝙞 response to the user`);
+				console.log(`Sent 🤖 𝙆𝙔𝙇𝙀𝘼𝙄 response to the user`);
 			} else {
-				throw new Error(`Invalid or missing response from 🤖 Vincent API`);
+				throw new Error(`Invalid or missing response from 🤖 Kyle API`);
 			}
 
 			await api.unsendMessage(processingMessage.messageID);
 		}
 	} catch (error) {
-		console.error(`❌ | Failed to get 🤖 𝙑𝙞𝙣𝙘𝙚𝙣𝙩𝙖𝙞 sponse: ${error.message}`);
+		console.error(`❌ | Failed to get 🤖 𝙆𝙔𝙇𝙀𝘼𝙄 sponse: ${error.message}`);
 		const errorMessage = `❌ | An error occurred. You can try typing your query again or resending it. There might be an issue with the server that's causing the problem, and it might resolve on retrying.`;
 		api.sendMessage(errorMessage, event.threadID);
 	}
